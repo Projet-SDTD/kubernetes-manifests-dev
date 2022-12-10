@@ -21,17 +21,20 @@ spec:
           name: phase1
           env:
             - name: URL
-              value: https://www.twitch.tv/damdamlive
+              value: https://www.twitch.tv/angledroit
             - name: FPS
-              value: "5"
+              value: "4"
             - name: STREAM_QUALITY
               value: 720p60
             - name: KAFKA_URL
               value: kafka-svc:9092
           resources:
             limits:
-              cpu: "1"
-              memory: 1Gi
+              cpu: "2"
+              memory: 500Mi
+            requests:
+              cpu: "2"
+              memory: 300Mi
       restartPolicy: Always
 
 ---
@@ -43,7 +46,7 @@ metadata:
   name: phase2
   namespace: sdtd
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: phase2
@@ -61,8 +64,11 @@ spec:
               value: kafka-svc:9092
           resources:
             limits:
-              cpu: "1"
-              memory: 1Gi
+              cpu: "2"
+              memory: 500Mi
+            requests:
+              cpu: "2"
+              memory: 500Mi
       restartPolicy: Always
 
 ---
@@ -74,7 +80,7 @@ metadata:
   name: phase3
   namespace: sdtd
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: phase3
@@ -94,6 +100,9 @@ spec:
               value: cassandra
           resources:
             limits:
-              cpu: "1"
-              memory: 1Gi
+              cpu: "2"
+              memory: 500Mi
+            requests:
+              cpu: "2"
+              memory: 500Mi
       restartPolicy: Always
