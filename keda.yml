@@ -7,7 +7,7 @@ spec:
   scaleTargetRef:
     name: phase2
   pollingInterval: 10
-  maxReplicaCount:  5
+  maxReplicaCount:  45
   triggers:
   - type: kafka
     metadata:
@@ -25,11 +25,11 @@ spec:
   scaleTargetRef:
     name: phase3
   pollingInterval: 10
-  maxReplicaCount:  5
+  maxReplicaCount:  25
   triggers:
   - type: kafka
     metadata:
       bootstrapServers: kafka-svc.sdtd:9092
       consumerGroup: my-group
-      topic: phase2
+      topic: phase3
       lagThreshold: "15"
