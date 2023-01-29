@@ -7,7 +7,7 @@ spec:
   scaleTargetRef:
     name: phase2
   pollingInterval: 10
-  maxReplicaCount:  45
+  maxReplicaCount:  25
   triggers:
   - type: kafka
     metadata:

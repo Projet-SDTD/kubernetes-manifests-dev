@@ -90,6 +90,8 @@ spec:
         volumeMounts:
         - name: cassandra-data
           mountPath: /var/lib/cassandra
+      nodeSelector:
+        worker: "true"
   volumeClaimTemplates:
   - metadata:
       name: cassandra-data

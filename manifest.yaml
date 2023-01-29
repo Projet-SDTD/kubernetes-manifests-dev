@@ -29,6 +29,8 @@ spec:
             requests:
               cpu: "1"
               memory: 500Mi
+#      nodeSelector:
+#        worker: "true"
       restartPolicy: Always
 
 ---
@@ -66,3 +68,5 @@ spec:
               cpu: "1"
               memory: 500Mi
       restartPolicy: Always
+#      nodeSelector:
+#        worker: "true"

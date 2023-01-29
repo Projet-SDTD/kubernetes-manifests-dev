@@ -53,10 +53,10 @@ spec:
           resources:
             limits:
               cpu: "2"
-              memory: 1Gi
+              memory: 1.5Gi
             requests:
               cpu: "2"
-              memory: 1Gi
+              memory: 1.5Gi
           image: ilisius/kafka-kraft
           imagePullPolicy: Always
           ports:
@@ -74,9 +74,75 @@ spec:
             - name: DEFAULT_REPLICATION_FACTOR
               value: '3'
             - name: DEFAULT_MIN_INSYNC_REPLICAS
-              value: '3'
+              value: '1'
             - name: DEFAULT_NUM_PARTITIONS
-              value: '10'
+              value: '30'
           volumeMounts:
             - name: kafka-storage
               mountPath: /mnt/kafka
+      tolerations:
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 10
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 10
+      nodeSelector:
+        worker: "true"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-exporter-svc
+  namespace: sdtd
+spec:
+  clusterIP: None
+  ports:
+    - name: '9308'
+      port: 9308
+      protocol: TCP
+      targetPort: 9308
+  selector:
+    app: kafka-exporter
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka-exporter
+  name: kafka-exporter
+  namespace: sdtd
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kafka-exporter
+  template:
+    metadata:
+      labels:
+        app: kafka-exporter
+    spec:
+      containers:
+        - image: danielqsj/kafka-exporter
+          imagePullPolicy: Always
+          name: kafka-exporter
+          ports:
+            - containerPort: 9308
+          command:
+            - /bin/kafka_exporter
+            - --kafka.server=kafka-svc:9092
+      restartPolicy: Always
+      nodeSelector:
+        worker: "true"
+      tolerations:
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 10
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 10
