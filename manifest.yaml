@@ -6,7 +6,7 @@ metadata:
   name: phase2
   namespace: sdtd
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: phase2
@@ -29,8 +29,8 @@ spec:
             requests:
               cpu: "1"
               memory: 500Mi
-#      nodeSelector:
-#        worker: "true"
+      nodeSelector:
+        worker: "true"
       restartPolicy: Always
 
 ---
@@ -42,7 +42,7 @@ metadata:
   name: phase3
   namespace: sdtd
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: phase3
@@ -68,5 +68,5 @@ spec:
               cpu: "1"
               memory: 500Mi
       restartPolicy: Always
-#      nodeSelector:
-#        worker: "true"
+      nodeSelector:
+        worker: "true"
